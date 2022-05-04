@@ -1,0 +1,80 @@
+{
+    "name": "typescript-server-logger",
+    "displayName": "Typescript Server Logger",
+    "description": "Opens TS log in side-panel & scrolls for you",
+    "publisher": "zardoy",
+    "version": "0.0.0-dev",
+    "license": "MIT",
+    "categories": [
+        "Other"
+    ],
+    "contributes": {
+        "commands": [
+            {
+                "command": "enableScrollLock",
+                "title": "Enable Scroll Lock"
+            },
+            {
+                "command": "disableScrollLock",
+                "title": "Disable Scroll Lock"
+            },
+            {
+                "command": "toggleScrollLock",
+                "title": "Toggle Scroll Lock"
+            }
+        ],
+        "configuration": {
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "enableScrollLock",
+                    "when": "!typescript-service-logger.scrollLockEnabled"
+                },
+                {
+                    "command": "disableScrollLock",
+                    "when": "typescript-service-logger.scrollLockEnabled"
+                }
+            ],
+            "editor/title": [
+                {
+                    "command": "disableScrollLock",
+                    "group": "navigation",
+                    "when": "typescript-service-logger.scrollLockEnabled && typescript-service-logger.showScrollButton"
+                },
+                {
+                    "command": "enableScrollLock",
+                    "group": "navigation",
+                    "when": "!typescript-service-logger.scrollLockEnabled && typescript-service-logger.showScrollButton"
+                }
+            ]
+        }
+    },
+    "activationEvents": [
+        "onLanguage:javascript",
+        "onLanguage:javascriptreact",
+        "onLanguage:typescript",
+        "onLanguage:typescriptreact",
+        "onLanguage:jsx-tags"
+    ],
+    "scripts": {
+        "start": "vscode-framework start",
+        "lint": "eslint src/**"
+    },
+    "dependencies": {
+        "vscode-framework": "^0.0.18"
+    },
+    "devDependencies": {
+        "@types/node": "^17.0.31",
+        "@types/vscode": "^1.66.0",
+        "@zardoy/tsconfig": "^1.5.0",
+        "eslint": "^8.14.0",
+        "eslint-config-zardoy": "^0.2.11",
+        "typescript": "^4.6.4"
+    }
+}
