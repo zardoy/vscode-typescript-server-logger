@@ -29,11 +29,21 @@ export const activate = () => {
             const isTsOutputOpened = vscode.window.visibleTextEditors.some(
                 ({ document }) => document.uri.scheme === 'output' && document.uri.path === 'extension-output-vscode.typescript-language-features-#1',
             )
+            console.log(
+                'opened outputs',
+                vscode.window.visibleTextEditors.filter(({ document }) => document.uri.scheme === 'output').map(item => item.document.uri.path),
+            )
             if (isTsOutputOpened)
                 changeTextDocumentDisposable = vscode.workspace.onDidChangeTextDocument(async ({ document, contentChanges }) => {
                     if (document.uri.scheme === 'output' && document.uri.path === 'extension-output-vscode.typescript-language-features-#1') {
-                        const logFile = /Log file: (.+)\n/.exec(contentChanges.map(({ text }) => text).join('\n'))?.[1]
-                        if (!logFile) return
+                        const allChanges = contentChanges.map(({ text }) => text).join('\n')
+                        console.log('analyzing', allChanges)
+                        const logFile = /Log file: (.+)\n/.exec(allChanges)?.[1]
+                        if (!logFile) {
+                            console.log('No log file!')
+                            return
+                        }
+
                         /* if (currentOpenEditor)  */ await vscode.commands.executeCommand('workbench.action.closeEditorsInOtherGroups')
                         scrollDocumenttDisposable?.dispose()
 
