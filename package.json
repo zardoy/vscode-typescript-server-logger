@@ -25,8 +25,15 @@
         ],
         "configuration": {
             "properties": {
-                "enabled": {
-                    "type": "boolean"
+                "openType": {
+                    "type": "string",
+                    "description": "Most probably you need semantic type",
+                    "default": "disabled",
+                    "enum": [
+                        "disabled",
+                        "semantic",
+                        "syntax"
+                    ]
                 }
             }
         },

@@ -3,7 +3,8 @@ import { getExtensionSetting, getExtensionSettingId, registerExtensionCommand } 
 
 export const activate = () => {
     const activateIfEnabled = () => {
-        if (!getExtensionSetting('enabled')) return
+        const openType = getExtensionSetting('openType')
+        if (openType === 'disabled') return
         let currentOpenEditor: vscode.TextEditor | undefined
         let changeTextDocumentDisposable: vscode.Disposable | undefined
         let scrollDocumenttDisposable: vscode.Disposable | undefined
@@ -38,7 +39,7 @@ export const activate = () => {
                     if (document.uri.scheme === 'output' && document.uri.path === 'extension-output-vscode.typescript-language-features-#1') {
                         const allChanges = contentChanges.map(({ text }) => text).join('\n')
                         console.log('analyzing', allChanges)
-                        const logFile = /Log file: (.+)\n/.exec(allChanges)?.[1]
+                        const logFile = new RegExp(` <${openType}> Log file: (.+)(\\r?)\\n`).exec(allChanges)?.[1]
                         if (!logFile) {
                             console.log('No log file!')
                             return
@@ -81,6 +82,6 @@ export const activate = () => {
 
     activateIfEnabled()
     vscode.workspace.onDidChangeConfiguration(({ affectsConfiguration }) => {
-        if (affectsConfiguration(getExtensionSettingId('enabled'))) activateIfEnabled()
+        if (affectsConfiguration(getExtensionSettingId('openType'))) activateIfEnabled()
     })
 }
